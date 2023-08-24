@@ -47,23 +47,23 @@ class Dataset:
                     data.append(
                         {
                             "id": json["id"],
-                            "title": json["title"],
-                            "abstract": json["abstract"],
+                            "title": json["title"].strip().replace("\n", " "),
+                            "abstract": json["abstract"].strip().replace("\n", " "),
                             "figure": resize(figure, self.resize_shape)
                             if self.resize_shape
                             else figure,
-                            "label": json["text"][idx],
+                            "label": json["text"][idx].strip().replace("\n", " "),
                         }
                     )
             except:
                 pass
         return data
 
-    def __len__(self):
-        return len(self.data)
-
     def __getitem__(self, idx):
-        return self.data[idx]
+        return self.load(idx)
+
+    def __len__(self):
+        return self.num_batches
 
 
 class CS10KDataset(Dataset):
